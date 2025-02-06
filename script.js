@@ -24,6 +24,7 @@ table.position.set(0, 0.1, 0); // Raise the table higher
 const loader = new GLTFLoader();
 let chair1, chair2, chair3; // Variables to store the chair models
 let pcModel, monitorModel, headsetModel; // Variables to store the new models
+// Get the hero section
 
 // Load gaming chair models
 loader.load('models/gaming_chair.glb', function (gltf) {
@@ -38,7 +39,7 @@ loader.load('models/gaming_chair.glb', function (gltf) {
     // Second chair (left)
     chair2 = gltf.scene.clone();
     applyMaterial(chair2);
-    chair2.scale.set(0.1, 0.1, 0.1);
+    chair2.scale.set(0.1, 0.1, 0.02);
     chair2.position.set(-2.6, 0.5, 2); // Position to the left
     chair2.rotation.y = Math.PI;
     chair2.scale.set(0, 0, 0); // Start with scale 0 (hidden)
@@ -47,7 +48,7 @@ loader.load('models/gaming_chair.glb', function (gltf) {
     // Third chair (right)
     chair3 = gltf.scene.clone();
     applyMaterial(chair3);
-    chair3.scale.set(0.1, 0.1, 0.1);
+    chair3.scale.set(0.1, 0.1, 0.02);
     chair3.position.set(2.6, 0.5, 2); // Position to the right
     chair3.rotation.y = Math.PI;
     chair3.scale.set(0, 0, 0); // Start with scale 0 (hidden)
@@ -145,18 +146,40 @@ hexagons.push(hexagon3);
 // GSAP Animation for Table, Chairs, Hexagons, and Models
 const textRight = document.querySelector('.text-right');
 const textLeft = document.querySelector('.text-left');
+const heroSection = document.querySelector('.hero'); // Select the hero section
 
-// Right-side hover (chair animations)
+// Right-side hover (chair animations + background change)
+// Right-side hover (chair animations + background change)
 textRight.addEventListener('mouseenter', () => {
+    // GSAP animations for table scaling
     gsap.to(table.scale, { duration: 0.5, x: 1.45, ease: "power2.out" });
+    gsap.to(monitorModel.scale, { duration: 0.5, x: 0.0035, y: 0.0035, z: 0.0035, ease: "power2.out" });
+    // Slide in the left chair (chair2)
+    gsap.to(chair2.position, { duration: 0.5, x: -2.6, ease: "power2.out" });
     gsap.to(chair2.scale, { duration: 0.5, x: 0.1, y: 0.1, z: 0.1, ease: "power2.out" });
+
+    // Slide in the right chair (chair3)
+    gsap.to(chair3.position, { duration: 0.5, x: 2.6, ease: "power2.out" });
     gsap.to(chair3.scale, { duration: 0.5, x: 0.1, y: 0.1, z: 0.1, ease: "power2.out" });
+
+    // Background transition effect
+    heroSection.classList.add('pacman-hover');
 });
 
 textRight.addEventListener('mouseleave', () => {
+    // Reset GSAP animations for table scaling
     gsap.to(table.scale, { duration: 0.5, x: 1, ease: "power2.out" });
+
+    // Slide out the left chair (chair2)
+    gsap.to(chair2.position, { duration: 0.5, x: -5, ease: "power2.out" }); // Move it further left
     gsap.to(chair2.scale, { duration: 0.5, x: 0, y: 0, z: 0, ease: "power2.out" });
+
+    // Slide out the right chair (chair3)
+    gsap.to(chair3.position, { duration: 0.5, x: 5, ease: "power2.out" }); // Move it further right
     gsap.to(chair3.scale, { duration: 0.5, x: 0, y: 0, z: 0, ease: "power2.out" });
+    gsap.to(monitorModel.scale, { duration: 0.5, x: 0, y: 0, z: 0, ease: "power2.out" });
+    // Remove background transition effect
+    heroSection.classList.remove('pacman-hover');
 });
 
 // Left-side hover (hexagons and new models animations)
@@ -166,7 +189,7 @@ textLeft.addEventListener('mouseenter', () => {
     gsap.to(hexagons[0].scale, { duration: 0.5, x: 3.2, y: 3.2, z: 3.2, ease: "power2.out" });
     gsap.to(hexagons[1].scale, { duration: 0.5, x: 3.2, y: 3.2, z: 3.2, ease: "power2.out" });
     gsap.to(hexagons[2].scale, { duration: 0.5, x: 3.2, y: 3.2, z: 3.2, ease: "power2.out" });
-
+    heroSection.classList.add('home-hover');
     // Animate PC and monitor to appear
     gsap.to(pcModel.scale, { duration: 0.5, x: 2, y: 2, z: 2, ease: "power2.out" });
     gsap.to(monitorModel.scale, { duration: 0.5, x: 0.0035, y: 0.0035, z: 0.0035, ease: "power2.out" });
@@ -179,7 +202,7 @@ textLeft.addEventListener('mouseleave', () => {
     gsap.to(hexagons[0].scale, { duration: 0.5, x: 0, y: 0, z: 0, ease: "power2.out" });
     gsap.to(hexagons[1].scale, { duration: 0.5, x: 0, y: 0, z: 0, ease: "power2.out" });
     gsap.to(hexagons[2].scale, { duration: 0.5, x: 0, y: 0, z: 0, ease: "power2.out" });
-
+    heroSection.classList.remove('home-hover');
     // Animate PC and monitor to disappear
     gsap.to(pcModel.scale, { duration: 0.5, x: 0, y: 0, z: 0, ease: "power2.out" });
     gsap.to(monitorModel.scale, { duration: 0.5, x: 0, y: 0, z: 0, ease: "power2.out" });
